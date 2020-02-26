@@ -1,0 +1,7 @@
+#!/bin/sh
+# This cript get called after all other system services
+# have been started at boot on router
+# ---------------------------------------------------------
+# Sample cron job to install after reboot
+cru a metrics "*/2 * * * * /jffs/scripts/forward_metrics.sh >/dev/null 2>&1"
+
