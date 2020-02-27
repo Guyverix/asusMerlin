@@ -14,9 +14,13 @@ for x in 1 2; do
   CLIENT_COUNT=$(wl -i eth${x} assoclist | wc -l)
   RADIO_POWER=$(wl -i eth${x} pwr_percent)
   RADIO_NOISE_FLOOR=$(wl -i eth${x} noise)
+  TX_POWER_WATT=$(wl txpwr | awk -F ' = ' '{print $2}' | sed 's/ .*.//')
+  TX_POWER_DB=$(wl txpwr | awk -F ' = ' '{print $1}' | sed 's/ .*.//')
 
   echo "wireless.${LOCAL_HOST}.ap.${SSID}.clients ${CLIENT_COUNT} ${DATES}" | nc -w 1 ${G_HOST}:${G_PORT}
-  echo "wireless.${LOCAL_HOST}.ap.${SSID}.power ${RADIO_POWER} ${DATES}" | nc -w 1 ${G_HOST}:${G_PORT}
+  echo "wireless.${LOCAL_HOST}.ap.${SSID}.power.mwatt ${TX_POWER_WATT} ${DATES}" | nc -w 1 ${G_HOST}:${G_PORT}
+  echo "wireless.${LOCAL_HOST}.ap.${SSID}.power.db ${TX_POWER_DB} ${DATES}" | nc -w 1 ${G_HOST}:${G_PORT}
+  echo "wireless.${LOCAL_HOST}.ap.${SSID}.power.percent ${RADIO_POWER} ${DATES}" | nc -w 1 ${G_HOST}:${G_PORT}
   echo "wireless.${LOCAL_HOST}.ap.${SSID}.noise_floor ${RADIO_NOISE_FLOOR} ${DATES}" | nc -w 1 ${G_HOST}:${G_PORT}
 
   CLIENT_LIST=$(wl -i eth${x} assoclist | awk '{print $2}')
